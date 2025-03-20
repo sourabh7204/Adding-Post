@@ -8,14 +8,18 @@
 </head>
 <body>
     <h1>Quora Posts</h1>
-    <% posts.forEach(post => { %>
-    <div class="post">
-        <h3 class="user">@<%= post.username %></h3>
-        <h4 class="content"><%= post.content %></h4>
-        <br>
-        <a href="http://localhost:8080/posts/<%=post.id%>">See in Detail</a>
-    </div>
-    <% }) %>
+    <% if (posts && posts.length > 0) { %>
+        <% posts.forEach(post => { %>
+        <div class="post">
+            <h3 class="user">@<%= post.username %></h3>
+            <h4 class="content"><%= post.content %></h4>
+            <br>
+            <a href="http://localhost:8080/posts/<%= post.id %>">See in Detail</a>
+        </div>
+        <% }) %>
+    <% } else { %>
+        <p>No posts available. Create one now!</p>
+    <% } %>
     <br>
     <br>
     <a href="http://localhost:8080/posts/new">Create New Post</a>

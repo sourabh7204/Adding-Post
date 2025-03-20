@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const port = 8080;
 const path = require("path");
+const { v4: uuidv4 } = require('uuid');
+
 
 app.use(express.urlencoded({
     extended: true
@@ -13,17 +15,17 @@ app.use(express.static(path.join(__dirname, "public")));
 
 let posts = [
     {
-        id:"1a",
+        id:uuidv4(),
         username: "Sourabh",
         content: "Consistency is the Key!",
     },
     {
-        id:"2b",
+        id:uuidv4(),
         username: "Sankeerth",
         content: "Hard Work is important to achieve Success...",
     },
     {
-        id:"3c",
+        id:uuidv4(),
         username: "Rohith",
         content: "I got selected for my 1st internship!",
     },
@@ -33,59 +35,40 @@ app.get("/posts", (req, res) => {
     res.render("index.ejs", { posts });
 });
 
+
+
 app.get("/posts/new", (req, res) => {
     res.render("new.ejs");
 });
 
-// app.post("/posts", (req, res) => {
-//     const { username, content } = req.body;
-//     posts.push({ username, content });
-//     res.redirect("/posts");
-// });
-
-// app.post("/posts", (req, res) => {
-//     const { username, content } = req.body;
-//     const newPost = {
-//         id: (posts.length + 1).toString(), // Generate unique ID
-//         username,
-//         content
-//     };
-//     posts.push(newPost);
-//     res.redirect("/posts");
-// });
-
-// app.get("/posts/:id", (req, res) => {
-//     let {id}=req.params;
-//     let post = posts.find((p)=>id==p.id);
-//     res.render("show.ejs", { post });
-// });
-
 app.post("/posts", (req, res) => {
-    const { username, content } = req.body;
-    const newPost = {
-        id: (posts.length + 1).toString(), // Generate unique ID
-        username,
-        content
-    };
-    posts.push(newPost);
-    console.log("New post added:", newPost);
+    let { username, content } = req.body;
+    let id = uuidv4();
+    posts.push({ id, username, content });
     res.redirect("/posts");
 });
 
+
+
 app.get("/posts/:id", (req, res) => {
-    const { id } = req.params;
-    console.log("Fetching post with ID:", id);
-    const post = posts.find((p) => p.id === id);
-    if (post) {
-        console.log("Post found:", post);
-        res.render("show.ejs", { post });
-    } else {
-        console.log("Post not found");
-        res.status(404).send("Post not found");
-    }
+    let { id } = req.params;
+    console.log(id);
+    let post = posts.find((p) => id === p.id);
+    res.render("show.ejs", { post });
+  });
+  
+app.patch("/posts/:id", (req, res) =>{
+    let{id}=req.params;
+    let newContent = req.body.content;
+    let post = posts.find((p) => id === p.id);
+    post.content = newContent;
+    console.log(post);
+    res.send("Patch request working");
 });
 
 
 app.listen(port, () => {
     console.log(`Listening on port: ${port}`);
 });
+
+
