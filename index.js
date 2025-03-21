@@ -11,7 +11,7 @@ app.use(express.urlencoded({
     extended: true
 }));
 
-app.use(methodOverride('X-HTTP-Method-Override'));
+app.use(methodOverride("_method"));
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -67,13 +67,19 @@ app.patch("/posts/:id", (req, res) =>{
     let post = posts.find((p) => id === p.id);
     post.content = newContent;
     console.log(post);
-    res.send("Patch request working");
+    res.redirect("/posts/");
 });
 
 app.get("/posts/:id/edit",(req,res)=>{
     let { id } = req.params;
     let post = posts.find((p) => id === p.id);
     res.render("edit.ejs", {post});
+});
+
+app.delete("/posts/:id", (req,res)=>{
+    let { id } = req.params;
+    let post = posts.find((p) => id === p.id);
+    res.send("delete success!");
 });
 
 app.listen(port, () => {
