@@ -8,6 +8,13 @@
 </head>
 <body>
     <h1>Quora Posts</h1>
+    
+    <!-- Search Form -->
+    <form action="/posts/search" method="get">
+        <input type="text" name="query" placeholder="Search posts...">
+        <button type="submit">Search</button>
+    </form>
+    
     <% if (posts && posts.length > 0) { %>
         <% posts.forEach(post => { %>
         <div class="post">
@@ -20,8 +27,6 @@
             <form action="/posts/<%= post.id %>?_method=DELETE" method="POST">
                 <button type="submit">Delete Post</button>
             </form>
-        
-           
         </div>
         <% }) %>
     <% } else { %>
